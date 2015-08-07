@@ -1,5 +1,4 @@
-# net_cms
-Design and Develop a website using ASP.NET MVC 4, EF, Knockoutjs and Bootstrap
+# Design and Develop a website using ASP.NET MVC 4, EF, Knockoutjs and Bootstrap
 
 # How to use code
 
