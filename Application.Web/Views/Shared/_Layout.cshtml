@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Contact manager</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/knockout")
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("scripts", required: false)
+</head>
+<body>
+
+    <div class="container-narrow">
+        <div class="masthead">
+            <ul class="nav nav-pills pull-right">
+                
+            </ul>
+            <h3 class="muted">Contact Manager</h3>
+        </div>
+        <div id="body" class="container">
+            @RenderSection("featured", required: false)
+            <section>
+                @RenderBody()
+            </section>
+        </div>
+        <hr />
+        <div id="footer">
+            <div class="container">
+                <p class="muted credit">&copy; @DateTime.Now.Year - Design and devloped by <a href="http://www.anandpandey.com">Anand Pandey</a>.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

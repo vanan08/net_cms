@@ -1,0 +1,82 @@
+﻿<table class="table">
+        <tr>
+            <th colspan="3">Profile Information</th>
+        </tr>
+        <tr></tr>
+    <tbody data-bind='with: profile'>
+        <tr>
+            <td>
+                <input class="input-large" data-bind='value: FirstName'  placeholder="First Name"/>
+            </td>
+            <td>
+                <input class="input-large" data-bind='value: LastName' placeholder="Last Name"/>
+            </td>
+            <td>
+                <input class="input-large" data-bind='value: Email' placeholder="Email" />
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table">
+        <tr>
+            <th colspan="3">Phone Information</th>
+        </tr>
+        <tr></tr>
+    <tbody data-bind='foreach: phoneNumbers'>
+        <tr>
+            <td>
+                <select data-bind="options: PhoneTypeData, value: PhoneTypeId, optionsValue: 'PhoneTypeId', optionsText: 'Name', optionsCaption: 'Select Phone Type...'"></select>
+            </td>
+            <td>
+                <input class="input-large" data-bind='value: Number' placeholder="Number" />
+            </td>
+            <td>
+                <a class="btn btn-small btn-danger" href='#' data-bind=' click: $parent.removePhone'>X</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+<button class="btn btn-small btn-primary" data-bind='click: addPhone'>Add New Phone</button>
+</p>
+<hr />
+<table class="table">
+    <tr><th colspan="5">Address Information</th></tr>
+    <tbody data-bind="foreach: addresses">
+        <tr>
+            <td colspan="5">
+                <select data-bind="options: AddressTypeData, value: AddressTypeId, optionsValue: 'AddressTypeId', optionsText: 'Name', optionsCaption: 'Select Address Type...'"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input class="input-large" data-bind='value: AddressLine1' placeholder="Address Line1" />
+                <p style="padding-top: 5px;"><input class="input-large" data-bind='value: State' placeholder="State" /></p>
+            </td>
+            <td>
+                <input class="input-large" data-bind=' value: AddressLine2' placeholder="Address Line2" />
+                <p style="padding-top: 5px;"><input class="input-large" data-bind='value: Country' placeholder="Country" /></p>
+            </td>
+            <td>
+                <input class="input-large" data-bind='value: City' placeholder="City" />
+                <p style="padding-top: 5px;"><input class="input-large" data-bind='value: ZipCode' placeholder="Zip Code" />
+                <a class="btn btn-small btn-danger" href='#' data-bind='click: $root.removeAddress'>X</a></p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+<button class="btn btn-small btn-primary" data-bind='click: addAddress'>Add New Address</button>
+</p>
+<hr />
+<button class="btn btn-small btn-success" data-bind='click: saveProfile'>Save Profile</button>
+<input class="btn btn-small btn-primary" type="button" value="Back To Profile List" data-bind="click:$root.backToProfileList" />
+
+<script src="~/Scripts/CreateEdit.js"></script>
+<style>
+    .validationMessage {
+        color: red;
+        font-size: 0.8em;
+    }
+</style>
