@@ -32,7 +32,7 @@ The key concept is stripping out most or all logic. Logic should not be bound to
 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/1.png) 
 
-And, the final solution will look like below image in Visual Studio :
+And, the final solution will look like below image in Visual Studio:
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/2.png) 
 
 # Seven Projects in One Solution : Is it required ?
@@ -92,6 +92,7 @@ Initial sketch:
 3.5 Click on Back to Profile button should return back the user to Contact List page.
 
 Initial Sketch:
+
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/12.png) 
 
 # Part 1: Create Web Application (Knockout.js, Asp.Net MVC and Bootstrap): For Designers
@@ -128,7 +129,7 @@ Right click on References and click on Manage NuGet Packages. Type Bootstrap on 
 # Step 4:
 
 add below line of code into BundleConfig.cs file under App_Start folder to add Knockoutjs and Bootstrap for every page
-'''
+*
 bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                                     "~/Scripts/knockout-{version}.js"));
 bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css"));
@@ -136,7 +137,7 @@ bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css"))
 Also in _Layout,cshtml file under Views/Shared folder add below line to register knockout files as :
 
 @Scripts.Render("~/bundles/knockout")
-'''
+*
 
 # Step 5:
 
