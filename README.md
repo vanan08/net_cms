@@ -30,7 +30,7 @@ Separation of Concern: Primary Objective
 
 The key concept is stripping out most or all logic. Logic should not be bound to a page. What if we need to re-use the logic from one page in another? In that case we will be tempted to copy-and-paste. If we are doing this then our project will become maintainable. Another important concept is to separate data access layer from any business logic, as we are planning to use Entity Framework this is less of a problem as EF should already have this end separate. We should be able to easily move all our EF files to another project and simply add a reference to the projects that need it. Below is the high level design:
 
-![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/1.png) 
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/1.png)
 
 And, the final solution will look like below image in Visual Studio:
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/2.png) 
@@ -63,8 +63,8 @@ Bootstrap CSS
 1.2 User should be able to delete any contact.
 1.3 User should able to edit any contact details.
 1.4 User should be able to create a new contact.
-
 Initial sketch:
+
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/10.png) 
 # Screen 2: Create New Contact
 
@@ -142,3 +142,8 @@ Also in _Layout,cshtml file under Views/Shared folder add below line to register
 # Step 5:
 
 Add a new folder name as Contact inside Views, and then add Index.cshtml as new View page. Then add a new Controller name it ContactController.cs inside Controller folder, and add a new Contact.js file under Scripts folder. Refer to below image.
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/19.png)
+
+
+
+
