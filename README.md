@@ -822,3 +822,320 @@ So finally, Application will display screens as per the requirement:
 Screen 1: Contact List - View all contacts
 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/28.png)
+
+Screen 2: Create New Contact - This screen should display one blank screen to provide functionality as.
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/29.png)
+
+Screen 3: Update Existing Contact - This screen should display screen with selected contact information details.
+30.png
+Validation:
+
+We are almost done with designing part of our application .The only thing left now, is to manage validation when the user clicks on “Save” button. Validation is the major requirement and now a day’s most ignorant part for any web application. By proper validation, user can know what data needs to be entered. Next in this article, I am going to discuss KnockoutJS Validation library which can be downloaded using NuGet. Let us check some of the most common validation scenarios, and how to achieve it using knockout validation.
+
+Scenario 1: First Name is a required field in form
+
+        this.FirstName = ko.observable().extend({ required: true }); 
+
+Scenario 2: Maximum number of character for First Name should not exceed 50 and should not be less than 3 character
+
+        this.FirstName = ko.observable().extend({ maxLength: 50, minLength:3}); 
+
+Scenario 4: Age is a required field in form, and should be always greater than 18 and less than 100
+
+        this.Age = ko.observable().extend({ required: true, max: 100, min:18 }); 
+
+Scenario 5: Email is a required field and should be in proper email format
+
+        this.Email = ko.observable().extend({ required: true, email: true }); 
+
+Scenario 6: Date of Birth is a required field and should be in proper date format
+
+        this.DateOfBirth = ko.observable().extend({ required: true, date: true }); 
+
+Scenario 7: Price is a required field and should be in proper number or decimal format
+
+        this.Price = ko.observable().extend({ required: true, number: true }); 
+
+Scenario 8: Phone Number is a required field and should be in proper US format
+
+Note: A valid US phone number has the following format: 1–xdd–xdd–dddd
+The "1–" at the beginning of the string is optional and so are the dashes. x is any digit between 2 and 9 while d can be any digit.
+
+      this.Phone = ko.observable().extend({ required: true, phoneUS: true }); 
+
+Scenario 9: ToDate field must be greater than FromDate field
+      this.ToDate = ko.observable().extend({ 
+          equal: function () { return (val > $(‘#FromDate’).val()) ? val : val + "|" } 
+      });
+
+Scenario 10: Phone number should accept only -+ () 0-9 from users
+      var regex = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/
+      this.PhoneNumber = ko.observable().extend({ pattern: regex });
+
+
+So, far we have seen different type of validation scenarios and their syntax; now let us implement it in our application. For that first download the library knockout.validation.js using NuGet. Right now our validation script is fully completed and should look like this :
+
+            var Profile = function (profile) {
+                var self = this;
+                self.ProfileId = ko.observable(profile ? profile.ProfileId : 0).extend({ required: true });
+                self.FirstName = ko.observable(profile ? profile.FirstName : '').extend({ required: true, maxLength: 50 });
+                self.LastName = ko.observable(profile ? profile.LastName : '').extend({ required: true, maxLength: 50 });
+                self.Email = ko.observable(profile ? profile.Email : '').extend({ required: true, maxLength: 50, email: true });
+                self.PhoneDTO = ko.observableArray(profile ? profile.PhoneDTO : []);
+                self.AddressDTO = ko.observableArray(profile ? profile.AddressDTO : []);
+            };
+             
+            var PhoneLine = function (phone) {
+                var self = this;
+                self.PhoneId = ko.observable(phone ? phone.PhoneId : 0);
+                self.PhoneTypeId = ko.observable(phone ? phone.PhoneTypeId : undefined).extend({ required: true });
+                self.Number = ko.observable(phone ? phone.Number : '').extend({ required: true, maxLength: 25, phoneUS: true });
+            };
+             
+            var AddressLine = function (address) {
+                var self = this;
+                self.AddressId = ko.observable(address ? address.AddressId : 0);
+                self.AddressTypeId = ko.observable(address ? address.AddressTypeId : undefined).extend({ required: true });
+                self.AddressLine1 = ko.observable(address ? address.AddressLine1 : '').extend({ required: true, maxLength: 100 });
+                self.AddressLine2 = ko.observable(address ? address.AddressLine2 : '').extend({ required: true, maxLength: 100 });
+                self.Country = ko.observable(address ? address.Country : '').extend({ required: true, maxLength: 50 });
+                self.State = ko.observable(address ? address.State : '').extend({ required: true, maxLength: 50 });
+                self.City = ko.observable(address ? address.City : '').extend({ required: true, maxLength: 50 });
+                self.ZipCode = ko.observable(address ? address.ZipCode : '').extend({ required: true, maxLength: 15 });
+            };
+
+After validation our final solution looks like below screen after click on “Save” button:
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/31.png)
+
+So far, we talked about achieving our UI without knowing any actual implementation (databases interaction) i.e. UI is created independently by any designer/developer without knowing the actual business logic. !!!That’s great!!!
+
+Next, I will talk about how to design database and how to implement business logic using structured layers.
+Part 2: Create Database Design (SQL Server 2008 r2): For DBA
+
+From database design prospective below are the main functionality which need to be achieved:
+A contact can have First Name, Last Name and Email.
+A Contact can have multiple addresses.
+A contact can have multiple phone numbers.
+
+To achieve the contact manager functionality, below database design has been used.
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/32.png)
+
+The relationship between tables are as per below database diagram:
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/33.png)
+
+Part 3: Design Logical Layers: For Core Developers
+
+As discussed earlier, our final structure is:
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/34.png)
+
+Next we will discuss the overall structure for our application, in terms of the logical group of components into separate layers, which communicates with each other with/without any restrictions and each logic has its own goals. Layers are an architectural style, and it resolves the maintenance and enhancement problems in the long run.
+
+So let us proceed with adding a class library in our solution and name it as Application.Common.
+Application.Common :
+
+This is a class library application, with some common functionality and can be used by different logical layers. For e.g. Security, Logging, Tracking, Validation etc. The components defined in this layer can not only reuse by other layers in this solution, but can also be utilize by other applications. To make it easier to change in future, we can use Dependency Injection and abstraction, with minimal change in our application.
+
+For example, In this layer we are going to use, a validator component to validate data entry, and custom Logger to log error or warning.
+
+Below is the screen shot for Solution folder after adding common class library :
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/35.png)
+
+Next, we will add a class library in our solution and name it as Application.Core.
+Application.Core:
+
+The components of this layer implement the system core functionality and encapsulate all the relevant business logic. Basically, this layer usually contains classes which implement the domain logic within their methods. This layer also defined a Unit of Work contract within the Core Layer so it will be able to comply with the PI principle. The primary goal is to differentiate and clearly separate the behavior of the core domain/business and the infrastructure implementation details such as data access and specific repositories linked to a particular technology such as ORM, or simply data access libraries or even cross-cutting aspects of the architecture. Thus, by isolating the application Core functionality, we will drastically increase the maintainability of our system and we could even replace the lower layers (data access, ORM, and databases) with low impact to the rest of the application.
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/36.png)
+
+Next, we will add a class library in our solution and name it as Application.DAL.
+Application.DAL:
+
+The responsibility of DAL is to and provides data access and persistence operations against the storage database; maintain multiple sessions and connection with multiple database, etc. The Primary goal here is to wrap the EF Context with an Interface/Contract so we can use it from the Manger and Core Layers with no direct dependencies to EF. The data persistence components provide access to the data hosted within the boundaries of our system (e.g., our main database which is within a specific BOUNDED CONTEXT), and also to the data exposed outside the boundaries of our system, such as Web services of external systems. Therefore, it has components like “Repositories” that provide such functionality to access the data hosted within the boundaries of our system, or “Service Agents” that will consume Web Services exposed by other external back-end systems. In addition, this layer will usually have base classes/components with reusable code for all the repository classes.
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/37.png)
+
+Next, we will add a class library in our solution and name it as Application. Repository.
+Application.Repository:
+
+This is a Class Library and can be accessible only by Application.Manager. For each main root ENTITY in our domain, we need to create one repository. Basically, Repositories are classes/components that encapsulate the logic required to access the application data sources. Therefore, they centralize common data access functionality so the application can have a better maintainability and de-coupling between technology and logic owned by the “Manager” and “Core” layers.
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/38.png)
+
+Next, we will add a class library in our solution and name it as Application. DTO.
+Application.DTO:
+
+Again this is a class library, which contains different container classes that exposes properties but no methods and communicate between Presentation Layer (Application.Web) and Service Layer (Application.Manager). A Data Transfer Object is an object that is used to encapsulate data, and send it from one subsystem of an application to another. Here we are going to use DTOs by the Manager layer to transfer data between itself and the UI layer. The main benefit here is that it reduces the amount of data that needs to be sent across the wire in distributed applications. They also make great models in the MVC pattern. We can also use DTO’s to encapsulate parameters for method calls. This can be useful if a method takes more than 4 or 5 parameters.
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/39.png)
+
+Next, we will add a class library in our solution and name it as Application. Manager.
+Application.Manager :
+
+This is a Class Library and can be accessible only by Application.Web. For each module we need to declare one Manager. The primary responsibilities of Manager are to accept request from UI/Web layer, then communicate with required repositories and manipulate data based on condition then return back the response. This layer is intermediate between UI and Repositories.
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/40.png)
+
+Application.Web:
+
+In previous article, we have already implemented this layer using Javascript dummy data. This is independent ASP.NET MVC web application, and contains only User Interface components, like html, .aspx, cshtml, MVC etc. It can also be any windows application. It communicates with some methods from manager layer, then evaluate results and choose whether to show an error or page1 or page2 etc. etc. This layer use javascript to load a model for the presentation, but the data is processed in the server through an ajax request, so the server only manage the business logic and the javascript manages the presentation logic.
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/41.png)
+
+To better understand how layers are communicating with each other, let us recall the initial requirement:
+Screen 1: Contact List - View all contacts
+
+1.1 This screen should display all the contacts available in Database. 
+1.2 User should be able to delete any contact.
+1.3 User should able to edit any contact details.
+1.4 User should be able to create a new contact.
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/42.png)
+
+To populate the grid data, on page load, we call GetAllProfiles() method of ContactController. This method returns all Profiles exist in database as an JSON object, then we bind it with JavaScript object self.Profiles. Below is the code to call GetAllProfiles() from contact.js:
+
+      var ProfilesViewModel = function () {
+          var self = this;
+          var url = "/contact/GetAllProfiles";
+          var refresh = function () {
+              $.getJSON(url, {}, function (data) {
+                  self.Profiles(data);
+              });
+          };
+
+On Remove button click we call DeleteProfile () method of ContactController. This method returns removes that profile from database. Below is the code to call DeleteProfile() from contact.js:
+
+      self.removeProfile = function (profile) {
+          if (confirm("Are you sure you want to delete this profile?")) {
+              var id = profile.ProfileId;
+              waitingDialog({});
+              $.ajax({
+                  type: 'DELETE', url: 'Contact/DeleteProfile/' + id,
+                  success: function () { self.Profiles.remove(profile); },
+                  error: function (err) {
+                      var error = JSON.parse(err.responseText);
+                      $("<div></div>").html(error.Message).dialog({ modal: true, 
+                        title: "Error", buttons: { "Ok": 
+                        function () { $(this).dialog("close"); } } }).show();
+                  },
+                  complete: function () { closeWaitingDialog(); }
+              });
+          }
+      };
+
+For both Create New button and Edit link, we only redirect to CreateEdit page with id as 0 for Create new and for edit the profile id of selected row. Below is the code for createProfile and editProfile from contact.js:
+
+      self.createProfile = function () {
+          window.location.href = '/Contact/CreateEdit/0';
+      };
+      
+      self.editProfile = function (profile) {
+          window.location.href = '/Contact/CreateEdit/' + profile.ProfileId;
+      };
+
+Below is the diagram representation of communication between three major layers:
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/43.png)
+
+Screen 2: Create New Contact
+
+This screen should display one blank screen to provide functionalities as.
+
+2.1 User should be able to Enter his/her First name, Last Name and Email Address.
+2.2 User should able to add any number of Phone numbers by clicking on Add numbers. 
+2.3 User should able to remove any phone number. 
+2.4 User should able to add any number of Addresses by clicking on Add new address. 
+2.5 User should able to remove any address. 
+2.6 Click on save button should save Contact details in Database and user will return back in Contact List page. 
+2.7 Click on Back to Profile button should return back the user to Contact List page. 
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/44.png)
+
+Screen 3: Update Existing Contact
+
+This screen should display screen with selected contact information details.
+
+3.1 User should be able to modify his/her First name, Last Name and Email Address.
+3.2 User should able to modify /delete/Add any number of Phone numbers by clicking on Add numbers or delete link.
+3.3 User should able to modify /delete/Add any number of Addresses by clicking on Add new address or delete link.
+3.4 Click on save button should update Contact details in Database and user will return back in Contact List page.
+3.5 Click on Back to Profile button should return back the user to Contact List page.
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/45.png)
+
+As discussed in previous implementation, for both “Create new” and “Edit existing” requirement we are using single page as CreateEdit.cshtml, by identifying the URL value for profileId i.e. if profileId in URL is 0, then it is request for creating a new profile, and if it is some value, the request is for edit existing profile. Below id the implementation details:
+
+In any case (Create or Edit), on page load we need to initialize data for PhoneType and AddressType. For that we have one method in ContactController as InitializePageData(). Below is the code in CreateEdit.js to initialize both arrays:
+
+      var AddressTypeData;
+      var PhoneTypeData;
+       
+      $.ajax({
+          url: urlContact + '/InitializePageData',
+          async: false,
+          dataType: 'json',
+          success: function (json) {
+              AddressTypeData = json.lstAddressTypeDTO;
+              PhoneTypeData = json.lstPhoneTypeDTO;
+          }
+      });
+
+Next, For Edit profile we need to get the profile data, for that we have GetProfileById() method in our ContactController. We modify our existing CreateEdit.js code as:
+
+      $.ajax({
+          url: urlContact + '/GetProfileById/' + profileId,
+          async: false,
+          dataType: 'json',
+          success: function (json) {
+              self.profile = ko.observable(new Profile(json));
+              self.phoneNumbers = ko.observableArray(ko.utils.arrayMap(json.PhoneDTO, function (phone) {
+                  return phone;
+              }));
+              self.addresses = ko.observableArray(ko.utils.arrayMap(json.AddressDTO, function (address) {
+                  return address;
+              }));
+          }
+      });
+
+Finally, For Save data we have two methods in database. If it’s Create new the we will call SaveProfileInformtion() method of ContactController else we will call UpdateProfileInformation() method. We modify our existing CreateEdit.js code as:
+
+      $.ajax({
+          type: (self.profile().ProfileId > 0 ? 'PUT' : 'POST'),
+          cache: false,
+          dataType: 'json',
+          url: urlContact + (self.profile().ProfileId > 0 ? '/UpdateProfileInformation?id=' + 
+            self.profile().ProfileId : '/SaveProfileInformation'),
+          data: JSON.stringify(ko.toJS(self.profile())), 
+          contentType: 'application/json; charset=utf-8',
+          async: false,
+          success: function (data) {
+              window.location.href = '/contact';
+          },
+          error: function (err) {
+              var err = JSON.parse(err.responseText);
+              var errors = "";
+              for (var key in err) {
+                  if (err.hasOwnProperty(key)) {
+                      errors += key.replace("profile.", "") + " : " + err[key];
+                  }
+              }
+              $("<div></div>").html(errors).dialog({ modal: true, 
+                title: JSON.parse(err.responseText).Message, buttons: { "Ok": 
+                function () { $(this).dialog("close"); } } }).show();
+          },
+          complete: function () {
+          }
+      });
+
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/46.png)
+
+Conclusion
+
+That's it!!! Hope you enjoy this article. I am not an expert, and also I have not followed the entire industry standard at the time of writing this article. And that, in a nutshell, is about all I know to get started designing ASP.NET MVC 4 application. I hope you enjoyed this tutorial and learned something.
+
