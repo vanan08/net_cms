@@ -33,6 +33,7 @@ The key concept is stripping out most or all logic. Logic should not be bound to
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/1.png)
 
 And, the final solution will look like below image in Visual Studio:
+
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/2.png) 
 
 # Seven Projects in One Solution : Is it required ?
@@ -79,6 +80,7 @@ Initial sketch:
 2.7 Click on Back to Profile button should return back the user to Contact List page. 
 
 Initial sketch:
+
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/11.png) 
 
 # Screen 3: Update Existing Contact
@@ -111,25 +113,30 @@ In below steps, we will work through the layout and design to build UI for above
 Step 1:
 
 # Create a new project as Blank Solution; name it as “Application”
+
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/14.png) 
 
 # Step 2:
 
 # Right Click on Solution folder and add new Project of type ASP.NET MVC 4 as an Internet Application Template with View engine as Razor.
+
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/15.png) 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/16.png) 
 
 # After Step 2 - the project structure should look like the below image
+
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/17.png) 
 # Step 3:
 
 Right click on References and click on Manage NuGet Packages. Type Bootstrap on search bar then click on Install button.
+
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/18.png) 
 
 # Step 4:
 
 add below line of code into BundleConfig.cs file under App_Start folder to add Knockoutjs and Bootstrap for every page
-*
+
+'''
 bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                                     "~/Scripts/knockout-{version}.js"));
 bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css"));
@@ -137,13 +144,75 @@ bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css"))
 Also in _Layout,cshtml file under Views/Shared folder add below line to register knockout files as :
 
 @Scripts.Render("~/bundles/knockout")
-*
+
+'''
 
 # Step 5:
 
 Add a new folder name as Contact inside Views, and then add Index.cshtml as new View page. Then add a new Controller name it ContactController.cs inside Controller folder, and add a new Contact.js file under Scripts folder. Refer to below image.
+
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/19.png)
 
+Step 6:
+
+Finally modify the default map route in Route.config to point to Contact controller as:
+
+'''
+routes.MapRoute(
+                name: "Default",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Contact", action = "Index", id = UrlParameter.Optional }
+            );
+'''
+
+And also modify the _Layout.cshtml file inside View/Shared as per the BootStrap Syntax. Below is the modified code:
+
+'''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Contact manager</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/knockout")
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("scripts", required: false)
+</head>
+<body>
+
+    <div class="container-narrow">
+        <div class="masthead">
+            <ul class="nav nav-pills pull-right">
+                
+            </ul>
+            <h3 class="muted">Contact Manager</h3>
+        </div>
+        <div id="body" class="container">
+            @RenderSection("featured", required: false)
+            <section>
+                @RenderBody()
+            </section>
+        </div>
+        <hr />
+        <div id="footer">
+            <div class="container">
+                <p class="muted credit">&copy; @DateTime.Now.Year - Design and devloped by <a href="http://www.anandpandey.com">Anand Pandey</a>.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+'''
+
+Step 7:
+
+Now we are done with initial setup to run the application. The output is as below:
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/20.png)
 
 
 
