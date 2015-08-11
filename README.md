@@ -1,6 +1,8 @@
 # Design and Develop a website using ASP.NET MVC 4, EF, Knockoutjs and Bootstrap
 
-TODO: apply theme http://www.responsivedesignblog.com/top-30-best-quality-bootstrap-admin-dashboard-themes-and-templates/
+TODO: apply theme
+http://www.tutorialsbag.com/2014/04/7-free-bootstrap-dashboard-admin-themes.html
+https://github.com/almasaeed2010/AdminLTE
 
 # How to use code
 
