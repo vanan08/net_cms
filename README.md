@@ -1,5 +1,7 @@
 # Design and Develop a website using ASP.NET MVC 4, EF, Knockoutjs and Bootstrap
 
+TODO: apply theme http://www.responsivedesignblog.com/top-30-best-quality-bootstrap-admin-dashboard-themes-and-templates/
+
 # How to use code
 
 Download Database script file here:
