@@ -17,6 +17,11 @@ http://docs.nuget.org/docs/workflows/using-nuget-without-committing-packages
 And finally, modify the connection string under Application.Web project.
 References
 
+#Web API Controller
+http://www.asp.net/web-api/overview/getting-started-with-aspnet-web-api/tutorial-your-first-web-api
+#Routes in ASP.NET MVC
+http://www.codeproject.com/Articles/641783/Customizing-Routes-in-ASP-NET-MVC
+
 http://knockoutjs.com/
 https://github.com/ericmbarnard/Knockout-Validation/wiki/Configuration
 http://twitter.github.com/bootstrap/
@@ -59,6 +64,7 @@ SQL Server 2008/2012
 Knockout.js & JQuery
 Castle Windsor for DI
 Bootstrap CSS
+
 # What we are trying to achieve: Requirement
 
 # Screen 1: Contact List - View all contacts
@@ -70,9 +76,10 @@ Bootstrap CSS
 Initial sketch:
 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/10.png) 
+
 # Screen 2: Create New Contact
 
-# This screen should display one blank screen to provide functionality as.
+This screen should display one blank screen to provide functionality as.
 
 2.1 User should be able to Enter his/her First name, Last Name and Email Address.
 2.2 User should able to add any number of Phone numbers by clicking on Add numbers. 
@@ -88,7 +95,7 @@ Initial sketch:
 
 # Screen 3: Update Existing Contact
 
-# This screen should display screen with selected contact information details.
+This screen should display screen with selected contact information details.
 
 3.1 User should be able to modify his/her First name, Last Name and Email Address.
 3.2 User should able to modify /delete/Add any number of Phone numbers by clicking on Add numbers or delete link.
@@ -102,7 +109,7 @@ Initial Sketch:
 
 # Part 1: Create Web Application (Knockout.js, Asp.Net MVC and Bootstrap): For Designers
 
-# Before kick-off the UI part, let us see what benefits we are getting using Knockoutjs and Bootstrap along with ASP.NET MVC 4.
+Before kick-off the UI part, let us see what benefits we are getting using Knockoutjs and Bootstrap along with ASP.NET MVC 4.
 
 Why Knockoutjs: Knockout is an MVVM pattern that works with a javascript ViewModel. The reason this works well with MVC is that serialization to and from javascript models in JSON is very simple, and it is also included with MVC 4. It allows us to develop rich UI's with a lot less coding and whenever we modify our data, Immediate it reflect in the user interface.
 
@@ -115,20 +122,21 @@ Javascript plugins for Modal, Dropdown, Scrollspy, Tab, Tooltip, Popover, Alert,
 In below steps, we will work through the layout and design to build UI for above requirement by using dummy javascript data.
 Step 1:
 
-# Create a new project as Blank Solution; name it as “Application”
+Create a new project as Blank Solution; name it as “Application”
 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/14.png) 
 
 # Step 2:
 
-# Right Click on Solution folder and add new Project of type ASP.NET MVC 4 as an Internet Application Template with View engine as Razor.
+Right Click on Solution folder and add new Project of type ASP.NET MVC 4 as an Internet Application Template with View engine as Razor.
 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/15.png) 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/16.png) 
 
-# After Step 2 - the project structure should look like the below image
+After Step 2 - the project structure should look like the below image
 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/17.png) 
+
 # Step 3:
 
 Right click on References and click on Manage NuGet Packages. Type Bootstrap on search bar then click on Install button.
@@ -137,18 +145,16 @@ Right click on References and click on Manage NuGet Packages. Type Bootstrap on 
 
 # Step 4:
 
-add below line of code into BundleConfig.cs file under App_Start folder to add Knockoutjs and Bootstrap for every page
+        add below line of code into BundleConfig.cs file under App_Start folder to add Knockoutjs and Bootstrap for every page
+        
+        bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
+                                            "~/Scripts/knockout-{version}.js"));
+        bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css"));
+        
+        Also in _Layout,cshtml file under Views/Shared folder add below line to register knockout files as :
+        
+        @Scripts.Render("~/bundles/knockout")
 
-'''
-bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-                                    "~/Scripts/knockout-{version}.js"));
-bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css"));
-
-Also in _Layout,cshtml file under Views/Shared folder add below line to register knockout files as :
-
-@Scripts.Render("~/bundles/knockout")
-
-'''
 
 # Step 5:
 
@@ -156,7 +162,7 @@ Add a new folder name as Contact inside Views, and then add Index.cshtml as new 
 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/19.png)
 
-Step 6:
+#Step 6:
 
 Finally modify the default map route in Route.config to point to Contact controller as:
 
@@ -209,14 +215,15 @@ And also modify the _Layout.cshtml file inside View/Shared as per the BootStrap 
     </html>
 
 
-Step 7:
+#Step 7:
 
 Now we are done with initial setup to run the application. The output is as below:
 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/20.png)
 
 We will use this page to display the requirement for Screen 1 i.e. Contact List - View all contacts
-Step 8:
+
+#Step 8:
 
 First we will create a dummy profile data as array in Contact.js (later we will fetch it from database), and then we will use this data to populate Grid.
 
@@ -314,6 +321,7 @@ And output is:
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/22.png)
 
 None of the added button and link will work, because we have not written any code for that, so let's fix that in next step.
+
 # Step 11:
 
 Add events for createProfile, editProfile and removeProfile in Contact.js
@@ -333,6 +341,7 @@ Add events for createProfile, editProfile and removeProfile in Contact.js
           };
 
 Now when we run our application and click on Remove button, then it will remove that profile from current array. As we define this array as observable, the UI will be kept in sync with changes to that array. Try it by clicking on Remove button. Edit link and Create Profile button will simply display the alert. So, let us implemented this functionality in next steps:
+
 # Step 12:
 
 Next we will add:
@@ -354,6 +363,7 @@ Modify createProfile and editProfile method of Contact.js, so that it will point
         };
 
 Running the application will now work for all the events in Contact List (screen -1). And create and Edit should redirect to CreateEdit page with required parameters.
+
 # Step 13:
 
 First we will start with adding Profile Information to this CreateEdit page. For that we need to do:
@@ -417,6 +427,7 @@ ProfileCollection, a viewmodel class that holds profile (a JavaScript object pro
 And finally, activate Knockout using ko.applyBindings().
 
       ko.applyBindings(new ProfileCollection());
+      
 # Step 14:
 
 Next we will write code in CreateEdit.cshtml page, that's supposed to display the Profile information. We need to use the “with” binding for profile data, so that it will render a copy of its child elements for a particular profile, and then assign the appropriate values. He code for CreateEdit.cshtml is as below:
@@ -469,6 +480,7 @@ In next step we will try to achieve below requirement:
 
 2.2 User should able to add any number of Phone numbers by clicking on Add numbers. 
 2.3 User should able to remove any phone number
+
 # Step 15:
 
 To achieve requirement no. 2.2 and 2.3, we need to do:
@@ -541,6 +553,7 @@ Modify ProfileCollection viewmodel class to also holds phoneNumbers along with b
                 alert("Date to save is : " + JSON.stringify(ko.toJS(self.profile())));
             };
         };
+        
 # Step 16:
 
 Next we will add one more section to add Phone Information in CreateEdit.cshtml page, that's supposed to display the Phone information. As one profile can have multiple phone of different types, So, we will use the “foreach” binding for Phone numbers data, so that it will render a copy of its child elements for a particular profile, and then assign the appropriate values. Add below section in CreateEdit.cshtml just after Profile Information and before Save button.
@@ -581,7 +594,9 @@ So now we left only with below requirement:
 2.4 User should able to add any number of Addresses by clicking on Add new address. 
 2.5 User should able to remove any address
 
-# Step 17: The requirement no. 2.4 and 2.5 are similar to Phone Information, below is the final code for CreateEdit.js and CreateEdit.cshtml files:
+# Step 17: 
+
+The requirement no. 2.4 and 2.5 are similar to Phone Information, below is the final code for CreateEdit.js and CreateEdit.cshtml files:
 
 For CreateEdit.js
 
@@ -831,7 +846,9 @@ Screen 2: Create New Contact - This screen should display one blank screen to pr
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/29.png)
 
 Screen 3: Update Existing Contact - This screen should display screen with selected contact information details.
-30.png
+
+![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/30.png)
+
 Validation:
 
 We are almost done with designing part of our application .The only thing left now, is to manage validation when the user clicks on “Save” button. Validation is the major requirement and now a day’s most ignorant part for any web application. By proper validation, user can know what data needs to be entered. Next in this article, I am going to discuss KnockoutJS Validation library which can be downloaded using NuGet. Let us check some of the most common validation scenarios, and how to achieve it using knockout validation.
