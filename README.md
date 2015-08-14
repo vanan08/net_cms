@@ -404,7 +404,7 @@ Profile, a simple JavaScript class constructor that stores a profile’s FirstNa
 
 ProfileCollection, a viewmodel class that holds profile (a JavaScript object providing Profile data) along with binding for saveProfile and backToProfileList events.
 
-      var ProfileCollection = function () {
+        var ProfileCollection = function () {
           var self = this;
        
           //if ProfileId is 0, It means Create new Profile
@@ -421,7 +421,7 @@ ProfileCollection, a viewmodel class that holds profile (a JavaScript object pro
           self.saveProfile = function () {
               alert("Date to save is : " + JSON.stringify(ko.toJS(self.profile())));
           };
-      };
+        };
  
 
 And finally, activate Knockout using ko.applyBindings().
@@ -432,7 +432,7 @@ And finally, activate Knockout using ko.applyBindings().
 
 Next we will write code in CreateEdit.cshtml page, that's supposed to display the Profile information. We need to use the “with” binding for profile data, so that it will render a copy of its child elements for a particular profile, and then assign the appropriate values. He code for CreateEdit.cshtml is as below:
 
-      <table class="table">
+        <table class="table">
               <tr>
                   <th colspan="3">Profile Information</th>
               </tr>
@@ -450,7 +450,7 @@ Next we will write code in CreateEdit.cshtml page, that's supposed to display th
                   </td>
               </tr>
           </tbody>
-      </table>
+        </table>
  
       <button class="btn btn-small btn-success" data-bind='click: saveProfile'>Save Profile</button>
       <input class="btn btn-small btn-primary" type="button" value="Back To Profile List" data-bind="click:$root.backToProfileList" />
@@ -882,12 +882,13 @@ Scenario 8: Phone Number is a required field and should be in proper US format
 Note: A valid US phone number has the following format: 1–xdd–xdd–dddd
 The "1–" at the beginning of the string is optional and so are the dashes. x is any digit between 2 and 9 while d can be any digit.
 
-      this.Phone = ko.observable().extend({ required: true, phoneUS: true }); 
+        this.Phone = ko.observable().extend({ required: true, phoneUS: true }); 
 
 Scenario 9: ToDate field must be greater than FromDate field
-      this.ToDate = ko.observable().extend({ 
-          equal: function () { return (val > $(‘#FromDate’).val()) ? val : val + "|" } 
-      });
+
+        this.ToDate = ko.observable().extend({ 
+                equal: function () { return (val > $(‘#FromDate’).val()) ? val : val + "|" } 
+        });
 
 Scenario 10: Phone number should accept only -+ () 0-9 from users
       var regex = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/
@@ -896,7 +897,7 @@ Scenario 10: Phone number should accept only -+ () 0-9 from users
 
 So, far we have seen different type of validation scenarios and their syntax; now let us implement it in our application. For that first download the library knockout.validation.js using NuGet. Right now our validation script is fully completed and should look like this :
 
-            var Profile = function (profile) {
+        var Profile = function (profile) {
                 var self = this;
                 self.ProfileId = ko.observable(profile ? profile.ProfileId : 0).extend({ required: true });
                 self.FirstName = ko.observable(profile ? profile.FirstName : '').extend({ required: true, maxLength: 50 });
@@ -904,16 +905,16 @@ So, far we have seen different type of validation scenarios and their syntax; no
                 self.Email = ko.observable(profile ? profile.Email : '').extend({ required: true, maxLength: 50, email: true });
                 self.PhoneDTO = ko.observableArray(profile ? profile.PhoneDTO : []);
                 self.AddressDTO = ko.observableArray(profile ? profile.AddressDTO : []);
-            };
+        };
              
-            var PhoneLine = function (phone) {
+        var PhoneLine = function (phone) {
                 var self = this;
                 self.PhoneId = ko.observable(phone ? phone.PhoneId : 0);
                 self.PhoneTypeId = ko.observable(phone ? phone.PhoneTypeId : undefined).extend({ required: true });
                 self.Number = ko.observable(phone ? phone.Number : '').extend({ required: true, maxLength: 25, phoneUS: true });
-            };
+        };
              
-            var AddressLine = function (address) {
+        var AddressLine = function (address) {
                 var self = this;
                 self.AddressId = ko.observable(address ? address.AddressId : 0);
                 self.AddressTypeId = ko.observable(address ? address.AddressTypeId : undefined).extend({ required: true });
@@ -923,7 +924,7 @@ So, far we have seen different type of validation scenarios and their syntax; no
                 self.State = ko.observable(address ? address.State : '').extend({ required: true, maxLength: 50 });
                 self.City = ko.observable(address ? address.City : '').extend({ required: true, maxLength: 50 });
                 self.ZipCode = ko.observable(address ? address.ZipCode : '').extend({ required: true, maxLength: 15 });
-            };
+        };
 
 After validation our final solution looks like below screen after click on “Save” button:
 
@@ -1019,18 +1020,19 @@ Screen 1: Contact List - View all contacts
 
 To populate the grid data, on page load, we call GetAllProfiles() method of ContactController. This method returns all Profiles exist in database as an JSON object, then we bind it with JavaScript object self.Profiles. Below is the code to call GetAllProfiles() from contact.js:
 
-      var ProfilesViewModel = function () {
-          var self = this;
-          var url = "/contact/GetAllProfiles";
-          var refresh = function () {
-              $.getJSON(url, {}, function (data) {
-                  self.Profiles(data);
-              });
-          };
+        var ProfilesViewModel = function () {
+                var self = this;
+                var url = "/contact/GetAllProfiles";
+                var refresh = function () {
+                        $.getJSON(url, {}, function (data) {
+                                self.Profiles(data);
+                        });
+                });
+        };
 
 On Remove button click we call DeleteProfile () method of ContactController. This method returns removes that profile from database. Below is the code to call DeleteProfile() from contact.js:
 
-      self.removeProfile = function (profile) {
+        self.removeProfile = function (profile) {
           if (confirm("Are you sure you want to delete this profile?")) {
               var id = profile.ProfileId;
               waitingDialog({});
@@ -1046,17 +1048,17 @@ On Remove button click we call DeleteProfile () method of ContactController. Thi
                   complete: function () { closeWaitingDialog(); }
               });
           }
-      };
+        };
 
 For both Create New button and Edit link, we only redirect to CreateEdit page with id as 0 for Create new and for edit the profile id of selected row. Below is the code for createProfile and editProfile from contact.js:
 
-      self.createProfile = function () {
-          window.location.href = '/Contact/CreateEdit/0';
-      };
+        self.createProfile = function () {
+                window.location.href = '/Contact/CreateEdit/0';
+        };
       
-      self.editProfile = function (profile) {
-          window.location.href = '/Contact/CreateEdit/' + profile.ProfileId;
-      };
+        self.editProfile = function (profile) {
+                window.location.href = '/Contact/CreateEdit/' + profile.ProfileId;
+        };
 
 Below is the diagram representation of communication between three major layers:
 
@@ -1095,62 +1097,56 @@ In any case (Create or Edit), on page load we need to initialize data for PhoneT
       var AddressTypeData;
       var PhoneTypeData;
        
-      $.ajax({
-          url: urlContact + '/InitializePageData',
-          async: false,
-          dataType: 'json',
-          success: function (json) {
-              AddressTypeData = json.lstAddressTypeDTO;
-              PhoneTypeData = json.lstPhoneTypeDTO;
-          }
-      });
+        $.ajax({
+                url: urlContact + '/InitializePageData',
+                async: false,
+                dataType: 'json',
+                success: function (json) {
+                        AddressTypeData = json.lstAddressTypeDTO;
+                        PhoneTypeData = json.lstPhoneTypeDTO;
+                }
+        });
 
 Next, For Edit profile we need to get the profile data, for that we have GetProfileById() method in our ContactController. We modify our existing CreateEdit.js code as:
 
-      $.ajax({
-          url: urlContact + '/GetProfileById/' + profileId,
-          async: false,
-          dataType: 'json',
-          success: function (json) {
-              self.profile = ko.observable(new Profile(json));
-              self.phoneNumbers = ko.observableArray(ko.utils.arrayMap(json.PhoneDTO, function (phone) {
-                  return phone;
-              }));
-              self.addresses = ko.observableArray(ko.utils.arrayMap(json.AddressDTO, function (address) {
-                  return address;
-              }));
-          }
-      });
+        $.ajax({
+                url: urlContact + '/GetProfileById/' + profileId,
+                async: false,
+                dataType: 'json',
+                success: function (json) {
+                        self.profile = ko.observable(new Profile(json));
+                        self.phoneNumbers = ko.observableArray(ko.utils.arrayMap(json.PhoneDTO, function (phone) {
+                                return phone;
+                        }));
+                        self.addresses = ko.observableArray(ko.utils.arrayMap(json.AddressDTO, function (address) {
+                                return address;
+                        }));
+                }
+        });
 
 Finally, For Save data we have two methods in database. If it’s Create new the we will call SaveProfileInformtion() method of ContactController else we will call UpdateProfileInformation() method. We modify our existing CreateEdit.js code as:
 
-      $.ajax({
-          type: (self.profile().ProfileId > 0 ? 'PUT' : 'POST'),
-          cache: false,
-          dataType: 'json',
-          url: urlContact + (self.profile().ProfileId > 0 ? '/UpdateProfileInformation?id=' + 
-            self.profile().ProfileId : '/SaveProfileInformation'),
-          data: JSON.stringify(ko.toJS(self.profile())), 
-          contentType: 'application/json; charset=utf-8',
-          async: false,
-          success: function (data) {
-              window.location.href = '/contact';
-          },
-          error: function (err) {
-              var err = JSON.parse(err.responseText);
-              var errors = "";
-              for (var key in err) {
-                  if (err.hasOwnProperty(key)) {
-                      errors += key.replace("profile.", "") + " : " + err[key];
-                  }
-              }
-              $("<div></div>").html(errors).dialog({ modal: true, 
-                title: JSON.parse(err.responseText).Message, buttons: { "Ok": 
-                function () { $(this).dialog("close"); } } }).show();
-          },
-          complete: function () {
-          }
-      });
+        $.ajax({
+                type: (self.profile().ProfileId > 0 ? 'PUT' : 'POST'),
+                cache: false,
+                dataType: 'json',
+                url: urlContact + (self.profile().ProfileId > 0 ? '/UpdateProfileInformation?id=' + self.profile().ProfileId : '/SaveProfileInformation'),
+                data: JSON.stringify(ko.toJS(self.profile())), 
+                contentType: 'application/json; charset=utf-8',
+                async: false,
+                success: function (data) {
+                        window.location.href = '/contact';
+                },
+                error: function (err) {
+                        var err = JSON.parse(err.responseText);
+                        var errors = "";
+                        for (var key in err) {
+                                if (err.hasOwnProperty(key)) {
+                                        errors += key.replace("profile.", "") + " : " + err[key];
+                                }
+                        }
+                        $("<div></div>").html(errors).dialog({ modal: true, title: JSON.parse(err.responseText).Message, buttons: { "Ok": function () { $(this).dialog("close"); } } }).show();}, complete: function () {}
+        });
 
 
 ![ScreenShot](https://github.com/vanan08/net_cms/blob/master/images/46.png)
